@@ -1,0 +1,13 @@
+<header class="boards-index">
+  <h2>My Boards</h2>
+</header>
+
+<ul class="boards-list">
+  <% boards.each(function (board) { %>
+    <li>
+      <a href="/#boards/<%= board.id %>">
+        <%= board.escape("name") %>
+      </a>
+    </li>
+  <% }); %>
+</ul>
