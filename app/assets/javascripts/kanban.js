@@ -11,8 +11,10 @@ window.Kanban = {
     Kanban.currentUser = new Kanban.Models.CurrentUser();
     Kanban.currentUser.fetch({
       success: function (response) {
+
         // console.log("got user");
         Kanban.boards = new Kanban.Collections.Boards();
+
         Kanban.boards.fetch({
           success: function (response) {
             // console.log("got boards");
