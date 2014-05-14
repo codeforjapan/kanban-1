@@ -43,10 +43,6 @@ module Api
       
       # I get card id of params
        card_ids = params[:card].map(&:to_i)
-      #card_id_counts = params[:card].map { |i| { i.id => i.comments_count } } 
-      # unless (card_ids - current_user.card_ids).empty?
-      #   render nothing: true, status: :unauthorized
-      # end
 
       # I will perform it to all the cards table when id matchs.
       # Actually, I will update position and list_id
@@ -54,14 +50,14 @@ module Api
         Card.update_all({ position: index,  list_id: @list.id },
                         { id: id })
       end
-      #pos = 1
-      #cards_id_counts.sort_by!{ |k,v| v }
-      #cards_id_counts.each {| k, v| 
-      #	 Card.update_all( { position: pos , list_id: @list.id },{ id: k } )
-      #   pos = pos + 1	
-      #}
 
       @cards = @list.cards.where(id: card_ids)
+      @cards.sort_by! &:comments_count
+      @cards.reverse!
+      @cards.each_with_index { |e,i| e.position = i }
+      @cards.each{ |e| 
+         e.save          
+      }
     end
 
   end

@@ -5,11 +5,12 @@ Kanban.Views.ListShow = Backbone.View.extend({
 
 	initialize: function () {
 		var that = this;
-    // that.model.on("change", that.render, that);
+    that.model.on("change", that.render, that);
     that.model.on("add", that.render, that);
 		that.model.get("cards").on("add", that.render, that);
 		that.model.get("cards").on("remove", that.render, that);
 		that.model.get("cards").on("change", that.render, that);
+		that.model.get("cards").on("reset", that.render, that);
 	},
 
 	events: {
@@ -128,7 +129,6 @@ Kanban.Views.ListShow = Backbone.View.extend({
 
 		var list = that.model;
 		var list_id = list.get("id");
-		// console.log("render list " + list_id);
 
     // list show
 		that.$el.attr("id", "list_" + list_id);
@@ -171,7 +171,7 @@ Kanban.Views.ListShow = Backbone.View.extend({
 
       update: function (event, ui) {
         var sortData = $(this).sortable("serialize");
-
+         console.log(sortData);
         if (sortData) {
 	        // add list_id to sortData
 	        var listId = parseInt($(this).data("listId"));
@@ -184,13 +184,13 @@ Kanban.Views.ListShow = Backbone.View.extend({
 						var cards = list.get("cards");
 						cards.reset(resortedCards.cards);
 
-						// console.log("cards post-sort");
-						// console.log(cards);
+						console.log("cards post-sort");
+						console.log(cards);
 	        });
         };
       }
     });
-
+		
 		return that;
 	}
 });

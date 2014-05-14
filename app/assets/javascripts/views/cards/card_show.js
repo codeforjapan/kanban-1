@@ -20,6 +20,7 @@ Kanban.Views.CardShow = Backbone.View.extend({
 
     var card = that.model;
     var cards = card.collection;
+    
     var comments = card.get("comments");
 
   	// get form attrs, reset form
@@ -50,18 +51,45 @@ Kanban.Views.CardShow = Backbone.View.extend({
 				comments.add(cardComment, { at: 0 });
 
 				var card = comments.card;
-				var comments_count = +card.get("comments_count");
+				var comments_count = card.get("comments_count");
 				card.set({ comments_count: comments_count + 1 });
 
 				_.defer(function () {
 					$("ul.card_comments li:first-child").addClass("animated fadeIn");
-				});
+				});	
 
+			
+				
+				var sortData = "";
+				card.collection.each(function(i)
+				{   sortData += "card[]=" + i.id + "&";}
+				);		
+				
+				if (sortData) {
+	        		// add list_id to sortData
+	        		var listId = card.get("list").id;
+	        		sortData += 'list_id=' + listId;
+
+        			console.log(sortData);
+    				var sortCardsUrl = "/api/cards/sort"
+	        		$.post(sortCardsUrl, sortData, function (resortedCards) {
+						var cards = card.get("list").get("cards");
+						cards.reset(resortedCards.cards);
+
+						console.log("cards add-commits");
+						console.log(cards);
+				
+				});
+				
 				// trigger card re-render
-				card.get("list").trigger("change");
+				//card.get("list").trigger("change");
 				// card.collection.trigger("change"); // FIXME: this fails inconsistently (?)
-      }
+
+      				};
+     }
     });
+
+
   },
 
   render: function () {
