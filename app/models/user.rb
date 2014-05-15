@@ -43,7 +43,8 @@ class User < ActiveRecord::Base
 
   def gravatar_url(size = 32)
     md5 = Digest::MD5.hexdigest(self.email)
-    "http://www.gravatar.com/avatar/#{md5}?s=#{size}"
+    #"http://www.gravatar.com/avatar/#{md5}?s=#{size}"
+     "/#{email}.png"
   end
 
   def as_json(options = {})
